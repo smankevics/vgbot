@@ -1,0 +1,25 @@
+{
+    "name": "Velgame bot",
+    "version": "1.0",
+    "description": "",
+    "icons": {
+        "512": "icons/512.png"
+    },
+    "background": {
+        "persistent": true,
+        "scripts": [
+            "js/utils.js",
+            "js/actions.js",
+            "js/main.js"
+        ]
+    },
+    "manifest_version": 2,
+    "permissions": [
+        "http://*.velgame.ru/"
+    ],
+    "browser_action": {
+        "default_title": "Velgame bot settings",
+        "default_icon": "icons/512.png",
+        "default_popup": "popup.html"
+    }
+}
