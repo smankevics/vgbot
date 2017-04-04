@@ -1,5 +1,4 @@
 var Bot = (() => {
-    const STATES = Utils.states;
     const minDelay = 500;
     const maxDelay = 2000;
 
@@ -7,12 +6,14 @@ var Bot = (() => {
     let nextMoveUp = false;
     let tabId;
     let started = false;
+    let lowHp = false;
     
     let start = () => {
         Utils.getSelectedTab((tab) => {
             tabId = tab.id;
             attachListener();
             started = true;
+            lowHp = false;
             process();
         });
     }
@@ -25,25 +26,36 @@ var Bot = (() => {
         
         nextMoveUp = false;
         started = false;
+        lowHp = false;
     }
 
     let process = () => {
-        Utils.getCurrentState((state) => {
-            if(state === STATES.DEFAULT) {
-                if(nextMoveUp)
-                    Actions.up(tabId);
-                else
-                    Actions.down(tabId);
+        Utils.getCurrentState(tabId, (state, _lowHp) => {
+            if(_lowHp)
+                lowHp = _lowHp;
+            
+            if(state === Defines.states.DEFAULT) {
+                if(lowHp) {
+                    Actions.useHpPotion(tabId);
+                    lowHp = false;
+                } else  {
+                    if(nextMoveUp)
+                        Actions.up(tabId);
+                    else
+                        Actions.down(tabId);
 
-                nextMoveUp = !nextMoveUp;
-            } else if(state === STATES.DEFAULT_ITEMS) {
+                    nextMoveUp = !nextMoveUp;
+                }
+            } else if(state === Defines.states.DEFAULT_ITEMS) {
                 Actions.itemsOnTheGround(tabId);
-            } else if(state === STATES.ITEMS_ON_THE_GROUND) {
+            } else if(state === Defines.states.ITEMS_ON_THE_GROUND) {
                 Actions.pickAllItems(tabId);
-            } else if(state === STATES.COMBAT_SELECT_ENEMY) {
+            } else if(state === Defines.states.COMBAT_SELECT_ENEMY) {
                 Actions.selectEnemy(tabId);
-            } else if(state === STATES.COMBAT_SELECT_ACTION) {
+            } else if(state === Defines.states.COMBAT_SELECT_ACTION) {
                 Actions.hitEnemy(tabId);
+            } else if(state === Defines.states.COMBAT_END_TURN) {
+                Actions.combatEndTurn(tabId);
             } else {
                 Actions.refresh(tabId);
             }
@@ -55,7 +67,6 @@ var Bot = (() => {
             if(processTimeout)
                 clearTimeout(processTimeout);
 
-            console.log(_changeInfo);
             processTimeout = setTimeout(process, Utils.rnd(minDelay, maxDelay));
         }
     };

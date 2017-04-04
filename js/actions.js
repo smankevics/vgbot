@@ -55,6 +55,8 @@ var Actions = {
             code: '(' + Utils.getLinkByText + ')("На главную")[0].click()'
         })
     },
+
+    //combat
     selectEnemy: (tabId) => {
         if(!tabId)
             return;
@@ -68,9 +70,31 @@ var Actions = {
             return;
 
         chrome.tabs.executeScript(tabId, {
+            code: '(' + Utils.getInputByName + ')("voi")[0].checked = true'
+        })
+        chrome.tabs.executeScript(tabId, {
             code: '(' + Utils.getButtonByName + ')("удaрить")[0].click()'
         })
     },
+    combatEndTurn: (tabId) => {
+        if(!tabId)
+            return;
+
+        chrome.tabs.executeScript(tabId, {
+            code: '(' + Utils.getButtonByName + ')("конец хода")[0].click()'
+        })
+    },
+
+    
+    useHpPotion: (tabId) => {
+        if(!tabId)
+            return;
+
+        chrome.tabs.executeScript(tabId, {
+            code: '(' + Utils.getLinkByText + ')("+")[0].click()'
+        })
+    },
+
     refresh: (tabId) => {
         if(!tabId)
             return;
