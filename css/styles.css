@@ -1,0 +1,10 @@
+body {
+  margin: 5px;
+  width: 200px;
+  font-size: 12px; 
+}
+
+.status {
+  line-height: 22px;
+  font-weight: bold;
+}

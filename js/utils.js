@@ -1,7 +1,5 @@
-var Utils = {
-    getButtonByName: (name) => Array.prototype.filter.call(document.getElementsByTagName("input"), (o) => o.value.indexOf(name) > -1),
-    getInputByName: (name) => Array.prototype.filter.call(document.getElementsByTagName("input"), (o) => o.name.indexOf(name) > -1),
-    getCurrentState: (tabId, cb) => {
+var Utils = (() => {
+    let getCurrentState = (tabId, cb) => {
         Utils.getPageContent(tabId, (content) => {
             let state = 'NONE',
                 lowHp = false;
@@ -29,20 +27,15 @@ var Utils = {
 
             cb(state, lowHp);
         })
-    },
-    getLinkByHref: (name) => Array.prototype.filter.call(document.getElementsByTagName("a"), (o) => o.href.indexOf(name) > -1),
-    getLinkByText: (value) => Array.prototype.filter.call(document.getElementsByTagName("a"), (o) => o.text.indexOf(value) > -1),
-    getPageContent: (tabId, cb) => {
+    };
+    let getPageContent = (tabId, cb) => {
         chrome.tabs.executeScript(tabId, {
             code: 'document.body.innerHTML'
         }, (result) => {
             cb(result[0]);
         })
-    },
-    getSelectedTab: (cb) => {
-        chrome.tabs.getSelected(null, cb);
-    },
-    getPersons: (content) => {
+    };
+    let getPersons =  (content) => {
         return content
             .split('<')
             .map((s) => s.substring(s.indexOf('>') + 1))
@@ -70,6 +63,17 @@ var Utils = {
 
                 return result;
             });
-    },
-    rnd: (min, max) => Math.floor((Math.random() * max) + min)
-}
+    }
+
+    return {
+        getButtonByName: (name) => Array.prototype.filter.call(document.getElementsByTagName("input"), (o) => o.value.indexOf(name) > -1),
+        getInputByName: (name) => Array.prototype.filter.call(document.getElementsByTagName("input"), (o) => o.name.indexOf(name) > -1),
+        getLinkByHref: (name) => Array.prototype.filter.call(document.getElementsByTagName("a"), (o) => o.href.indexOf(name) > -1),
+        getLinkByText: (value) => Array.prototype.filter.call(document.getElementsByTagName("a"), (o) => o.text.indexOf(value) > -1),
+        getSelectedTab: (cb) => chrome.tabs.getSelected(null, cb),
+        rnd: (min, max) => Math.floor((Math.random() * max) + min),
+        getCurrentState: getCurrentState,
+        getPersons: getPersons,
+        getPageContent: getPageContent
+    }
+})()

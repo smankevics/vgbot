@@ -2,10 +2,21 @@
 <html>
 <head>
     <script src="js/popup.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" crossorigin="anonymous">
+    <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
-    <button id="btn_start">START</button>
-    <button id="btn_stop">STOP</button>
+    <div class="row"> 
+        <div class="col-xs-12">
+            <button id="btn_start" class="btn btn-xs btn-primary">
+                <span class="glyphicon glyphicon-play" aria-hidden="true"></span>
+            </button>
+            <button id="btn_stop" class="btn btn-xs btn-danger">
+                <span class="glyphicon glyphicon-stop" aria-hidden="true"></span>
+            </button>
+            <div id="status" class="status pull-right"></div>
+        </div>
+    </div>
 </body>
 </html>
 
