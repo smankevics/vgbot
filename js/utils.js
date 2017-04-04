@@ -1,31 +1,19 @@
 var Utils = (() => {
     let getCurrentState = (tabId, cb) => {
         Utils.getPageContent(tabId, (content) => {
-            let state = 'NONE',
-                lowHp = false;
-            
-            if (content.indexOf('do=nord') > -1 && content.indexOf('Вещи под ногами') > -1) {
-                state = Defines.states.DEFAULT_ITEMS;
-            } else if (content.indexOf('do=nord') > -1) {
+            let state = 'NONE';
+
+            if (content.indexOf('do=nord') > -1 && content.indexOf('do=zuid' > -1)) {
                 state = Defines.states.DEFAULT;
-            } else if (content.indexOf('Вещи под ногами') > -1 && content.indexOf('Забрать всё') > -1 && content.indexOf('inf') > -1) {
+            } else if (content.indexOf('Вещи под ногами') > -1 && content.indexOf('Забрать всё') > -1) {
                 state = Defines.states.ITEMS_ON_THE_GROUND;
             } else if (content.indexOf('<a href="main.php?blok=fight&amp;do=boi') > -1) {
-                state = Defines.states.COMBAT_SELECT_ENEMY;
+                state = Defines.states.SELECT_ENEMY;
             } else if (content.indexOf('<form action="main.php?blok=fight&amp;do=boi') > -1) {
-                let persons = Utils.getPersons(content);
-
-                //do not move if hp less than 10%
-                if(persons[0].hp / persons[0].hpMax < 0.2)
-                    lowHp = true;
-
-                if(persons[0].moves > 2)
-                    state = Defines.states.COMBAT_SELECT_ACTION;
-                else
-                    state = Defines.states.COMBAT_END_TURN;
+                state = Defines.states.COMBAT;
             }
 
-            cb(state, lowHp);
+            cb(state, content);
         })
     };
     let getPageContent = (tabId, cb) => {
@@ -35,7 +23,7 @@ var Utils = (() => {
             cb(result[0]);
         })
     };
-    let getPersons =  (content) => {
+    let getPersons = (content) => {
         return content
             .split('<')
             .map((s) => s.substring(s.indexOf('>') + 1))
@@ -63,6 +51,30 @@ var Utils = (() => {
 
                 return result;
             });
+    };
+    let getPlayerData = (body) => {
+        let result = body
+            .split('<')
+            .map((s) => s.substring(s.indexOf('>') + 1))
+            .filter((s) => s);
+
+        result = result
+            .slice(result.indexOf('Герой') + 1)
+            .filter((s) => s !== ' [' && s !== ' ' && s !== '] ' && s !== ']' && s !== '+');
+
+        return {
+            name: result[0].substring(1),
+            level: Number(result[1].split(' ')[1]),
+            rating: Number(result[1].split(' ')[3]),
+            hp: Number(result[2].split('/')[0]),
+            hpMax: Number(result[2].split('/')[1]),
+            mp: Number(result[3].split('/')[0]),
+            mpMax: Number(result[3].split('/')[1]),
+            money: Number(result[4].split(' ')[1]),
+            posX: Number(result[6].split('/')[0]),
+            posY: Number(result[6].split('/')[1]),
+            location: result[7].split(' ')[1]
+        }
     }
 
     return {
@@ -73,6 +85,7 @@ var Utils = (() => {
         getSelectedTab: (cb) => chrome.tabs.getSelected(null, cb),
         rnd: (min, max) => Math.floor((Math.random() * max) + min),
         getCurrentState: getCurrentState,
+        getPlayerData: getPlayerData,
         getPersons: getPersons,
         getPageContent: getPageContent
     }

@@ -7,10 +7,23 @@ var Bot = (() => {
     let tabId;
     let started = false;
     let lowHp = false;
+
+    //scenes
+    let mainScene;
+    let itemsOnTheGroundScene;
+    let selectEnemyScene;
+    let fightScene;
     
     let start = () => {
         Utils.getSelectedTab((tab) => {
             tabId = tab.id;
+
+            //create scenes
+            mainScene = MainScene(tabId);
+            itemsOnTheGroundScene = ItemsOnTheGroundScene(tabId);
+            selectEnemyScene = SelectEnemyScene(tabId);
+            fightScene = FightScene(tabId);
+
             attachListener();
             started = true;
             lowHp = false;
@@ -30,32 +43,15 @@ var Bot = (() => {
     }
 
     let process = () => {
-        Utils.getCurrentState(tabId, (state, _lowHp) => {
-            if(_lowHp)
-                lowHp = _lowHp;
-            
+        Utils.getCurrentState(tabId, (state, body) => {
             if(state === Defines.states.DEFAULT) {
-                if(lowHp) {
-                    Actions.useHpPotion(tabId);
-                    lowHp = false;
-                } else  {
-                    if(nextMoveUp)
-                        Actions.up(tabId);
-                    else
-                        Actions.down(tabId);
-
-                    nextMoveUp = !nextMoveUp;
-                }
-            } else if(state === Defines.states.DEFAULT_ITEMS) {
-                Actions.itemsOnTheGround(tabId);
+                mainScene.process(body);
             } else if(state === Defines.states.ITEMS_ON_THE_GROUND) {
-                Actions.pickAllItems(tabId);
-            } else if(state === Defines.states.COMBAT_SELECT_ENEMY) {
-                Actions.selectEnemy(tabId);
-            } else if(state === Defines.states.COMBAT_SELECT_ACTION) {
-                Actions.hitEnemy(tabId);
-            } else if(state === Defines.states.COMBAT_END_TURN) {
-                Actions.combatEndTurn(tabId);
+                itemsOnTheGroundScene.process(body);
+            } else if(state === Defines.states.SELECT_ENEMY) {
+                selectEnemyScene.process(body);
+            } else if(state === Defines.states.COMBAT) {
+                fightScene.process(body);
             } else {
                 Actions.refresh(tabId);
             }

@@ -13,11 +13,12 @@
     }
 
     window.onload = function() {
-        document.getElementById('status').innerHTML = 'Stopped';
+        let isStarted = chrome.extension.getBackgroundPage().Bot.isStarted();
+        
+        document.getElementById('status').innerHTML = isStarted ? 'Started' : 'Stopped';
         document.getElementById('btn_start').onclick = start;
         document.getElementById('btn_stop').onclick = stop;
 
-        let isStarted = chrome.extension.getBackgroundPage().Bot.isStarted();
         document.getElementById('btn_start').disabled = isStarted;
         document.getElementById('btn_stop').disabled = !isStarted;
     }

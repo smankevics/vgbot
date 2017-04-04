@@ -8,6 +8,10 @@
     "background": {
         "persistent": true,
         "scripts": [
+            "js/scenes/mainScene.js",
+            "js/scenes/itemsOnTheGroundScene.js",
+            "js/scenes/selectEnemyScene.js",
+            "js/scenes/fightScene.js",
             "js/defines.js",
             "js/utils.js",
             "js/actions.js",

@@ -17,10 +17,8 @@ var Actions = (() => {
 
         //combat
         selectEnemy: (tabId) => execute(tabId, Utils.getLinkByHref, '("do=boi")[0].click()'),
-        hitEnemy: (tabId) => {
-            execute(tabId, Utils.getInputByName, '("voi")[0].checked = true');
-            execute(tabId, Utils.getButtonByName, '("удaрить")[0].click()');
-        },
+        autoHitCheckbox: (tabId) => execute(tabId, Utils.getInputByName, '("voi")[0].checked = true'),
+        hitEnemy: (tabId) => execute(tabId, Utils.getButtonByName, '("удaрить")[0].click()'),
         combatEndTurn: (tabId) => execute(tabId, Utils.getButtonByName, '("конец хода")[0].click()'),
 
         useHpPotion: (tabId) => execute(tabId, Utils.getLinkByText, '("+")[0].click()'),
