@@ -77,6 +77,45 @@ var Utils = (() => {
         }
     }
 
+    let checkWeapon = (body, s, f) => {
+        var xhr = new XMLHttpRequest();
+        xhr.open('GET', 'http://velgame.ru/main.php?blok=ekipir&rnd=' + Utils.getRnd(body), true);
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState == 4) {
+                if (this.status == 200) {
+                    let items = this.responseText
+                        .split('<')
+                        .map((s) => s.substring(s.indexOf('>') + 1))
+                        .filter((s) => s);
+
+                    let weaponIndex = items.indexOf(items.filter((o) => o.indexOf('Оружие') > -1)[0]);
+                    if (items[weaponIndex + 1].indexOf('Щит') > -1) {
+                        //no weapon
+                        s();
+                    } else {
+                        f();
+                    }
+                } else {
+                    f();
+                }
+            }
+        };
+        xhr.send();
+    }
+    
+    let equipWeapon = (body, f) => {
+        var xhr = new XMLHttpRequest();
+        xhr.open('GET', 'http://velgame.ru/main.php?blok=meshok&doo=1&idm=422&ekip=7&wher=1&list=1&rnd=' + Utils.getRnd(body), true);
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState == 4) {
+                if (this.status == 200) {
+                    f();
+                }
+            }
+        };
+        xhr.send();
+    }
+
     return {
         getButtonByName: (name) => Array.prototype.filter.call(document.getElementsByTagName("input"), (o) => o.value.indexOf(name) > -1),
         getInputByName: (name) => Array.prototype.filter.call(document.getElementsByTagName("input"), (o) => o.name.indexOf(name) > -1),
@@ -84,9 +123,13 @@ var Utils = (() => {
         getLinkByText: (value) => Array.prototype.filter.call(document.getElementsByTagName("a"), (o) => o.text.indexOf(value) > -1),
         getSelectedTab: (cb) => chrome.tabs.getSelected(null, cb),
         rnd: (min, max) => Math.floor((Math.random() * max) + min),
+        getRnd: (body) => body.match(/rnd=[0-9]+/g),
+        getIdm: (body) => body.match(/idm=[0-9]+/g),
         getCurrentState: getCurrentState,
         getPlayerData: getPlayerData,
         getPersons: getPersons,
-        getPageContent: getPageContent
+        getPageContent: getPageContent,
+        checkWeapon: checkWeapon,
+        equipWeapon: equipWeapon
     }
 })()

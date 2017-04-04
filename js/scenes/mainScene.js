@@ -21,6 +21,14 @@ var MainScene = (tabId) => {
     }
   }
 
+  let checkWeapon = (body) => {
+    state++;
+
+    Utils.checkWeapon(body, () => {
+      Utils.equipWeapon(body, () => states[state](body))
+    }, () => states[state](body))
+  }
+
   let nextMoveUp = false;
   let navigate = (body) => {
     state = 0;
@@ -35,6 +43,7 @@ var MainScene = (tabId) => {
   const states = [
     pickItems,
     usePotion,
+    checkWeapon,
     navigate
   ]
 
