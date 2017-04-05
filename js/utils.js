@@ -11,6 +11,8 @@ var Utils = (() => {
                 state = Defines.states.SELECT_ENEMY;
             } else if (content.indexOf('<form action="main.php?blok=fight&amp;do=boi') > -1) {
                 state = Defines.states.COMBAT;
+            } else if (content.indexOf('main.php?blok=restart') > -1) {
+                state = Defines.states.DEATH;
             }
 
             cb(state, content);

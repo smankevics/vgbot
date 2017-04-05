@@ -58,7 +58,10 @@ var Bot = (() => {
                 noAction = fightScene.process(body);
             } else if(state === Defines.states.NONE) {
                 Actions.refresh(tabId);
-            } 
+            } else if (state === Defines.states.DEATH) {
+                //stop the process
+                stop();
+            }
 
             if(noAction)
                 processTimeout = setTimeout(process, Utils.rnd(minDelay, maxDelay));

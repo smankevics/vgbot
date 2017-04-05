@@ -13,5 +13,6 @@ var Defines = {
         ITEMS_ON_THE_GROUND: 'State.ITEMS_ON_THE_GROUND',
         SELECT_ENEMY: 'State.SELECT_ENEMY',
         COMBAT: 'State.COMBAT',
+        DEATH: 'State.DEATH'
     }
 }
