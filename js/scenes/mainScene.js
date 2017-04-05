@@ -3,7 +3,7 @@ var MainScene = (tabId, settings) => {
 
   let pickItems = (body) => {
     state++;
-    if(body.indexOf('Вещи под ногами') > -1) {
+    if(body.indexOf('Вещи под ногами') > -1 && settings.pickUpItems) {
       Actions.itemsOnTheGround(tabId);
     } else {
       return states[state](body);
