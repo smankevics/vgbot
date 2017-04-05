@@ -1,4 +1,4 @@
-var MainScene = (tabId) => {
+var MainScene = (tabId, settings) => {
   let state = 0;
 
   let pickItems = (body) => {
@@ -6,7 +6,7 @@ var MainScene = (tabId) => {
     if(body.indexOf('Вещи под ногами') > -1) {
       Actions.itemsOnTheGround(tabId);
     } else {
-      states[state](body);
+      return states[state](body);
     }
   }
 
@@ -17,7 +17,7 @@ var MainScene = (tabId) => {
     if(player.hp / player.hpMax < 0.2) {
       Actions.useHpPotion(tabId);
     } else {
-      states[state](body);
+      return states[state](body);
     }
   }
 
@@ -25,13 +25,20 @@ var MainScene = (tabId) => {
     state++;
 
     Utils.checkWeapon(body, () => {
-      Utils.equipWeapon(body, () => states[state](body))
-    }, () => states[state](body))
+      Utils.equipWeapon(body, () => {
+        return states[state](body);
+      });
+    }, () => {
+      return states[state](body);
+    });
   }
 
   let nextMoveUp = false;
   let navigate = (body) => {
     state = 0;
+    if(!settings.autoNavigate)
+      return true;
+
     if(nextMoveUp)
         Actions.up(tabId);
     else

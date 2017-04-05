@@ -1,6 +1,6 @@
 var Bot = (() => {
-    const minDelay = 500;
-    const maxDelay = 2000;
+    const minDelay = 300;
+    const maxDelay = 1000;
 
     let processTimeout;
     let nextMoveUp = false;
@@ -13,16 +13,19 @@ var Bot = (() => {
     let itemsOnTheGroundScene;
     let selectEnemyScene;
     let fightScene;
+
+    let settings = {};
     
-    let start = () => {
+    let start = (_settings) => {
+        settings = _settings;
         Utils.getSelectedTab((tab) => {
             tabId = tab.id;
 
             //create scenes
-            mainScene = MainScene(tabId);
-            itemsOnTheGroundScene = ItemsOnTheGroundScene(tabId);
-            selectEnemyScene = SelectEnemyScene(tabId);
-            fightScene = FightScene(tabId);
+            mainScene = MainScene(tabId, settings);
+            itemsOnTheGroundScene = ItemsOnTheGroundScene(tabId, settings);
+            selectEnemyScene = SelectEnemyScene(tabId, settings);
+            fightScene = FightScene(tabId, settings);
 
             attachListener();
             started = true;
@@ -43,18 +46,22 @@ var Bot = (() => {
     }
 
     let process = () => {
+        let noAction = false;
         Utils.getCurrentState(tabId, (state, body) => {
             if(state === Defines.states.DEFAULT) {
-                mainScene.process(body);
+                noAction = mainScene.process(body);
             } else if(state === Defines.states.ITEMS_ON_THE_GROUND) {
-                itemsOnTheGroundScene.process(body);
+                noAction = itemsOnTheGroundScene.process(body);
             } else if(state === Defines.states.SELECT_ENEMY) {
-                selectEnemyScene.process(body);
+                noAction = selectEnemyScene.process(body);
             } else if(state === Defines.states.COMBAT) {
-                fightScene.process(body);
-            } else {
+                noAction = fightScene.process(body);
+            } else if(state === Defines.states.NONE) {
                 Actions.refresh(tabId);
-            }
+            } 
+
+            if(noAction)
+                processTimeout = setTimeout(process, Utils.rnd(minDelay, maxDelay));
         });
     }
 
