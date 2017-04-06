@@ -12,9 +12,13 @@ var MainScene = (tabId, settings) => {
 
   let usePotion = (body) => {
     state++;
+
+    if(!settings.autoHeal)
+      return states[state](body);
+      
     let player = Utils.getPlayerData(body);
 
-    if(player.hp / player.hpMax < 0.2) {
+    if(player.hp / player.hpMax < settings.autoHealValue / 100) {
       Actions.useHpPotion(tabId);
     } else {
       return states[state](body);

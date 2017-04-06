@@ -9,10 +9,13 @@
     <div class="row"> 
         <div class="col-xs-12">
             <button id="btn_start" class="btn btn-xs btn-primary">
-                <span class="glyphicon glyphicon-play" aria-hidden="true"></span>
+                <span class="glyphicon glyphicon-play" title="Start" aria-hidden="true"></span>
             </button>
             <button id="btn_stop" class="btn btn-xs btn-danger">
-                <span class="glyphicon glyphicon-stop" aria-hidden="true"></span>
+                <span class="glyphicon glyphicon-stop" title="Stop" aria-hidden="true"></span>
+            </button>
+            <button id="btn_save" class="btn btn-xs btn-default">
+                <span class="glyphicon glyphicon-check" title="Save Settings" aria-hidden="true"></span>
             </button>
             <div id="status" class="status pull-right"></div>
         </div>
@@ -20,10 +23,16 @@
     <div class="row"> 
         <div class="col-xs-12">
             <div class="checkbox">
-                <label>
-                    <input id="autoNavigate" type="checkbox"> <p>Auto navigate</p>
-                    <input id="pickUpItems" type="checkbox"> <p>Pick up items</p>
-                </label>
+                <label><input id="autoNavigate" type="checkbox"> <p>Auto navigate</p></label>
+            </div>
+            <div class="checkbox">
+                <label><input id="pickUpItems" type="checkbox"> <p>Pick up items</p></label>
+            </div>
+            <div class="checkbox">
+                <label><input id="autoHeal" type="checkbox"> <p>Auto heal</p></label>
+                 when less than 
+                <input id="autoHealValue" type="text" maxlength="3" />
+                 % HP
             </div>
         </div>
     </div>

@@ -17,12 +17,20 @@
     function getSettings() {
         return {
             autoNavigate: document.getElementById('autoNavigate').checked,
-            pickUpItems: document.getElementById('pickUpItems').checked
+            pickUpItems: document.getElementById('pickUpItems').checked,
+            autoHeal: document.getElementById('autoHeal').checked,
+            autoHealValue: document.getElementById('autoHealValue').value
         }
     }
 
     function saveSettings() {
         localStorage.setItem('userSettings', JSON.stringify(getSettings()));
+    }
+
+    function handleHealValueChange(e) {
+        if (isNaN(parseFloat(e.target.value)) || !isFinite(e.target.value)) e.target.value = 0;
+        if (e.target.value < 0) e.target.value = 0;
+        if (e.target.value > 100) e.target.value = 100;
     }
 
     window.onload = function() {
@@ -31,6 +39,8 @@
         document.getElementById('status').innerHTML = isStarted ? 'Started' : 'Stopped';
         document.getElementById('btn_start').onclick = start;
         document.getElementById('btn_stop').onclick = stop;
+        document.getElementById('btn_save').onclick = saveSettings;
+        document.getElementById('autoHealValue').onchange = handleHealValueChange;
 
         document.getElementById('btn_start').disabled = isStarted;
         document.getElementById('btn_stop').disabled = !isStarted;
@@ -41,6 +51,8 @@
             settings = JSON.parse(settings);
             document.getElementById('autoNavigate').checked = settings.autoNavigate;
             document.getElementById('pickUpItems').checked = settings.pickUpItems;
+            document.getElementById('autoHeal').checked = settings.autoHeal;
+            document.getElementById('autoHealValue').value = settings.autoHealValue || 50;
         }
 
     }

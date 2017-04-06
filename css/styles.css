@@ -1,6 +1,6 @@
 body {
   margin: 5px;
-  width: 200px;
+  width: 250px;
   font-size: 12px; 
 }
 
@@ -11,4 +11,12 @@ body {
 
 label p {
   margin: 2px 0 0 0;
+}
+
+#btn_stop {
+  margin-right: 15px;
+}
+
+#autoHealValue {
+  width: 30px;
 }
