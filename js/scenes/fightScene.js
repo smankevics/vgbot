@@ -35,6 +35,11 @@ var FightScene = (tabId) => {
 
   return {
     process: () => {
+      if(state > 0) {
+        let d = PageContent.getRoundData();
+        if(d && d.player && d.player.moves > 2)
+          state = 0;
+      }
       states[state]();
     }
   }

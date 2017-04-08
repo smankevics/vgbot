@@ -71,34 +71,50 @@ var PageContent = (() => {
     return res;
   }
 
-  let getPersons = () => {
-    return pageHtml
-      .split('<')
-      .map((s) => s.substring(s.indexOf('>') + 1))
-      .filter((s) => s.match(/\S+[0-9]+\/[0-9]+/g))
-      .map((s) => {
-        let name = s.split('.')[0];
-        name = name.substring(0, name.lastIndexOf(' '));
-        let result = {
-          name: name
-        }
+  let getFighterData = (s) => {
+    let data = {};
+    s.replace('Цель: ', '').split(' ').forEach((val, i) => {
+      if(i === 0) {
+        data.name = val;
+      } else if (val.indexOf('дист.') === 0) {
+        data.distance = Number(val.split('.')[1]);
+      } else if (val.indexOf('ож.') === 0) {
+        data.hp = Number(val.split('.')[1].split('/')[0]);
+        data.hpMax = Number(val.split('.')[1].split('/')[1]);
+      } else if (val.indexOf('ом.') === 0) {
+        data.mp = Number(val.split('.')[1].split('/')[0]);
+        data.mpMax = Number(val.split('.')[1].split('/')[1]);
+      } else if (val.indexOf('яр.') === 0) {
+        data.fury = Number(val.split('.')[1].split('/')[0]);
+        data.furyMax = Number(val.split('.')[1].split('/')[1]);
+      } else if (val.indexOf('од.') === 0) {
+        data.moves = Number(val.split('.')[1].split('/')[0]);
+        data.movesMax = Number(val.split('.')[1].split('/')[1]);
+      }
+    });
+    return data;
+  }
+  
+  let getRoundData = () => {
+    let infoLineIndex = 0;
+    let result = pageText.split('\n').filter((s) => s);
 
-        s.replace(name + ' ', '')
-          .split(' ')
-          .forEach((s) => {
-            let items = s.split('.'),
-              name = items[0],
-              values = items[1].split('/'),
-              val = Number(values[0]),
-              max = Number(values[1]);
+    result.forEach((s, i) => {
+      if(s.indexOf('Идёт бой! ') === 0)
+        infoLineIndex = i;
+    });
 
-            result[Defines.propsMap[name]] = val;
-            if (max >= 0)
-              result[Defines.propsMap[name] + 'Max'] = max;
-          });
-
-        return result;
-      });
+    let posLine = result.filter((s) => s[0] ===  '[' && s[s.length-1] === ']')[0];
+    let playerPos = posLine.indexOf('*');
+    let enemyPos = posLine.indexOf('#') > -1 ? posLine.indexOf('#') : playerPos;
+    let res = {
+      round: Number(result[infoLineIndex].split(' ')[3]),
+      player: getFighterData(result[infoLineIndex+1]),
+      enemy: getFighterData(result[infoLineIndex+2]),
+      playerPos: playerPos,
+      enemyPos: enemyPos
+    }
+    return res;
   };
 
   return {
@@ -108,6 +124,6 @@ var PageContent = (() => {
     
     getCurrentState: getCurrentState,
     getPlayerData: getPlayerData,
-    getPersons: getPersons
+    getRoundData: getRoundData
   }
 })();
