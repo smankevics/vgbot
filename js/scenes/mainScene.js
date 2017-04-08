@@ -1,44 +1,44 @@
 var MainScene = (tabId, settings) => {
   let state = 0;
 
-  let pickItems = (body) => {
+  let pickItems = () => {
     state++;
-    if(body.indexOf('Вещи под ногами') > -1 && settings.pickUpItems) {
+    if(PageContent.getHtml().indexOf('Вещи под ногами') > -1 && settings.pickUpItems) {
       Actions.itemsOnTheGround(tabId);
     } else {
-      return states[state](body);
+      return states[state]();
     }
   }
 
-  let usePotion = (body) => {
+  let usePotion = () => {
     state++;
 
     if(!settings.autoHeal)
-      return states[state](body);
+      return states[state]();
       
-    let player = Utils.getPlayerData(body);
+    let player = PageContent.getPlayerData();
 
     if(player.hp / player.hpMax < settings.autoHealValue / 100) {
       Actions.useHpPotion(tabId);
     } else {
-      return states[state](body);
+      return states[state]();
     }
   }
 
-  let checkWeapon = (body) => {
+  let checkWeapon = () => {
     state++;
 
-    Utils.checkWeapon(body, () => {
-      Utils.equipWeapon(body, () => {
-        return states[state](body);
+    Utils.checkWeapon(PageContent.getHtml(), () => {
+      Utils.equipWeapon(PageContent.getHtml(), () => {
+        return states[state]();
       });
     }, () => {
-      return states[state](body);
+      return states[state]();
     });
   }
 
   let nextMoveUp = false;
-  let navigate = (body) => {
+  let navigate = () => {
     state = 0;
     if(!settings.autoNavigate)
       return true;
@@ -59,8 +59,8 @@ var MainScene = (tabId, settings) => {
   ]
 
   return {
-    process: (body) => {
-      states[state](body);
+    process: () => {
+      states[state]();
     }
   }
 };

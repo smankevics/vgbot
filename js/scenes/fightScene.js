@@ -1,27 +1,27 @@
 var FightScene = (tabId) => {
   let state = 0;
 
-  let checkAutoHit = (body) => {
+  let checkAutoHit = () => {
     state++;
     Actions.autoHitCheckbox(tabId);
-    states[state](body);
+    states[state]();
   }
 
-  let hit = (body) => {
+  let hit = () => {
     state++;
     Actions.hitEnemy(tabId);
   }
 
-  let checkEndTurnButton = (body) => {
+  let checkEndTurnButton = () => {
     state++;
 
-    if(body.indexOf('>конец хода<') > -1)
-      states[state](body);
+    if(PageContent.getHtml().indexOf('"конец хода"') > -1)
+      states[state]();
     else
       Actions.refresh(tabId);
   }
 
-  let endTurn = (body) => {
+  let endTurn = () => {
     state = 0;
     Actions.combatEndTurn(tabId);
   }
@@ -34,8 +34,8 @@ var FightScene = (tabId) => {
   ]
 
   return {
-    process: (body) => {
-      states[state](body);
+    process: () => {
+      states[state]();
     }
   }
 };

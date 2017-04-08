@@ -8,11 +8,13 @@
     "background": {
         "persistent": true,
         "scripts": [
+            "lib/bluebird.min.js",
             "js/scenes/mainScene.js",
             "js/scenes/itemsOnTheGroundScene.js",
             "js/scenes/selectEnemyScene.js",
             "js/scenes/fightScene.js",
             "js/defines.js",
+            "js/services/pageContent.js",
             "js/utils.js",
             "js/actions.js",
             "js/main.js"
