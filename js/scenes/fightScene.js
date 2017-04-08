@@ -12,6 +12,15 @@ var FightScene = (tabId) => {
     Actions.hitEnemy(tabId);
   }
 
+  let checkEndTurnButton = (body) => {
+    state++;
+
+    if(body.indexOf('>конец хода<') > -1)
+      states[state](body);
+    else
+      Actions.refresh(tabId);
+  }
+
   let endTurn = (body) => {
     state = 0;
     Actions.combatEndTurn(tabId);
@@ -20,6 +29,7 @@ var FightScene = (tabId) => {
   const states = [
     checkAutoHit,
     hit,
+    checkEndTurnButton,
     endTurn
   ]
 
