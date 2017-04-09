@@ -5,6 +5,11 @@ var FightScene = (tabId, settings) => {
     let d = PageContent.getRoundData();
     if(d && d.player && d.player.moves >= 2) {
       state++;
+
+      //skip ckeck&equip weapon steps 
+      if(!settings.autoEquipWeapon)
+        state += 3;
+
       states[state]();
     } else {
       if(PageContent.getHtml().indexOf('"конец хода"') > -1) {
@@ -15,13 +20,12 @@ var FightScene = (tabId, settings) => {
     }
   }
 
-  let checkWeapon = () => {
-    state ++;
-    if(!settings.autoEquipWeapon) {
-      state++;
-      return states[state]();
-    }
+  let preHit = () => {
+    state++;
+    Actions.hitEnemy(tabId);
+  }
 
+  let checkWeapon = () => {
     let noWeapon = false;
     PageContent.getRoundData().logs.forEach((s) => {
       if(s.indexOf('оружием с точностью') > -1)
@@ -30,10 +34,11 @@ var FightScene = (tabId, settings) => {
 
     if(noWeapon) {
       //equip weapon
+      state++;
       Actions.changeWeapon(tabId);
     } else {
       //skip next step
-      state++;
+      state += 2;
       states[state]();
     }
   }
@@ -57,7 +62,7 @@ var FightScene = (tabId, settings) => {
 
   const states = [
     checkTurns,
-    hit,
+    preHit,
     checkWeapon,
     equipWeapon,
     checkAutoHit,
