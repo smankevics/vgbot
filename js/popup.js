@@ -19,6 +19,7 @@
             autoNavigate: document.getElementById('autoNavigate').checked,
             pickUpItems: document.getElementById('pickUpItems').checked,
             autoHeal: document.getElementById('autoHeal').checked,
+            autoEquipWeapon: document.getElementById('autoEquipWeapon').checked,
             autoHealValue: document.getElementById('autoHealValue').value
         }
     }
@@ -52,6 +53,7 @@
             document.getElementById('autoNavigate').checked = settings.autoNavigate;
             document.getElementById('pickUpItems').checked = settings.pickUpItems;
             document.getElementById('autoHeal').checked = settings.autoHeal;
+            document.getElementById('autoEquipWeapon').checked = settings.autoEquipWeapon;
             document.getElementById('autoHealValue').value = settings.autoHealValue || 50;
         }
 

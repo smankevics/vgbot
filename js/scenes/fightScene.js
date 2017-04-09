@@ -1,6 +1,17 @@
 var FightScene = (tabId) => {
   let state = 0;
 
+  let checkWeapon = () => {
+    state++;
+    let d = PageContent.getRoundData();
+    if(d && d.round && d.round % 5 === 0) {
+      //check and equip weapon
+      states[state]();
+    } else {
+      states[state]();
+    }
+  }
+
   let checkAutoHit = () => {
     state++;
     Actions.autoHitCheckbox(tabId);
@@ -27,6 +38,7 @@ var FightScene = (tabId) => {
   }
 
   const states = [
+    checkWeapon,
     checkAutoHit,
     hit,
     checkEndTurnButton,

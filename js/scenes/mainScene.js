@@ -28,6 +28,9 @@ var MainScene = (tabId, settings) => {
   let checkWeapon = () => {
     state++;
 
+    if(!settings.autoEquipWeapon)
+      return states[state]();
+
     Utils.checkWeapon(PageContent.getHtml(), () => {
       Utils.equipWeapon(PageContent.getHtml(), () => {
         return states[state]();
