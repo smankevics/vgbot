@@ -65,6 +65,7 @@ var Utils = (() => {
     rnd: (min, max) => Math.floor((Math.random() * max) + min),
     getRnd: (body) => body.match(/rnd=[0-9]+/g),
     getIdm: (body) => body.match(/idm=[0-9]+/g),
+    getBestWeaponId: getBestWeaponId,
     checkWeapon: checkWeapon,
     equipWeapon: equipWeapon
   }

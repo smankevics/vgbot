@@ -9,9 +9,9 @@ var PageContent = (() => {
       state = Defines.states.DEFAULT;
     } else if (pageHtml.indexOf('Вещи под ногами') > -1 && pageHtml.indexOf('Забрать всё') > -1) {
       state = Defines.states.ITEMS_ON_THE_GROUND;
-    } else if (pageHtml.indexOf('<a href="main.php?blok=fight&amp;do=boi') > -1) {
+    } else if (/<a.*дист.*ож.*ом.*од.*a>/g.test(pageHtml)) {
       state = Defines.states.SELECT_ENEMY;
-    } else if (pageHtml.indexOf('<form action="main.php?blok=fight&amp;do=boi') > -1) {
+    } else if (/Идёт бой!.*До конца раунда.*секунд/g.test(pageHtml)) {
       state = Defines.states.COMBAT;
     } else if (pageHtml.indexOf('main.php?blok=restart') > -1) {
       state = Defines.states.DEATH;
@@ -112,8 +112,16 @@ var PageContent = (() => {
       player: getFighterData(result[infoLineIndex+1]),
       enemy: getFighterData(result[infoLineIndex+2]),
       playerPos: playerPos,
-      enemyPos: enemyPos
+      enemyPos: enemyPos,
+      logs: []
     }
+
+    //add logs
+    for(var i = infoLineIndex+3; i < result.length; i++) {
+    	if(result[i].indexOf(res.player.name) === 0)
+      	res.logs.push(result[i]);
+    }
+
     return res;
   };
 

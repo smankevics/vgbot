@@ -19,9 +19,12 @@ var Actions = (() => {
         selectEnemy: (tabId) => execute(tabId, Utils.getLinkByHref, '("do=boi")[0].click()'),
         autoHitCheckbox: (tabId) => execute(tabId, Utils.getInputByName, '("voi")[0].checked = true'),
         hitEnemy: (tabId) => execute(tabId, Utils.getButtonByName, '("удaрить")[0].click()'),
+        changeWeapon: (tabId) => execute(tabId, Utils.getButtonByName, '("сменить оружие")[0].click()'),
         combatEndTurn: (tabId) => execute(tabId, Utils.getButtonByName, '("конец хода")[0].click()'),
 
         useHpPotion: (tabId) => execute(tabId, Utils.getLinkByText, '("+")[0].click()'),
+        useEquipment: (tabId, idm) => execute(tabId, Utils.getLinkByHref, '("idm=' + idm + '")[0].click()'),
+
         refresh: (tabId) => execute(tabId, Utils.getLinkByText, '("Обновить")[0].click()')
     }
 })()

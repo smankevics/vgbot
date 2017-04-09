@@ -1,15 +1,47 @@
-var FightScene = (tabId) => {
+var FightScene = (tabId, settings) => {
   let state = 0;
 
-  let checkWeapon = () => {
-    state++;
+  let checkTurns = () => {
     let d = PageContent.getRoundData();
-    if(d && d.round && d.round % 5 === 0) {
-      //check and equip weapon
+    if(d && d.player && d.player.moves >= 2) {
+      state++;
       states[state]();
     } else {
+      if(PageContent.getHtml().indexOf('"конец хода"') > -1) {
+        Actions.combatEndTurn(tabId);
+      } else {
+        Actions.refresh(tabId);
+      }
+    }
+  }
+
+  let checkWeapon = () => {
+    state ++;
+    if(!settings.autoEquipWeapon) {
+      state++;
+      return states[state]();
+    }
+
+    let noWeapon = false;
+    PageContent.getRoundData().logs.forEach((s) => {
+      if(s.indexOf('оружием с точностью') > -1)
+        noWeapon = true;
+    });
+
+    if(noWeapon) {
+      //equip weapon
+      Actions.changeWeapon(tabId);
+    } else {
+      //skip next step
+      state++;
       states[state]();
     }
+  }
+
+  let equipWeapon = () => {
+    state++;
+    let idm = Utils.getBestWeaponId(PageContent.getHtml());
+    Actions.useEquipment(tabId, idm);
   }
 
   let checkAutoHit = () => {
@@ -23,35 +55,20 @@ var FightScene = (tabId) => {
     Actions.hitEnemy(tabId);
   }
 
-  let checkEndTurnButton = () => {
-    state++;
-
-    if(PageContent.getHtml().indexOf('"конец хода"') > -1)
-      states[state]();
-    else
-      Actions.refresh(tabId);
-  }
-
-  let endTurn = () => {
-    state = 0;
-    Actions.combatEndTurn(tabId);
-  }
-
   const states = [
-    checkWeapon,
-    checkAutoHit,
+    checkTurns,
     hit,
-    checkEndTurnButton,
-    endTurn
+    checkWeapon,
+    equipWeapon,
+    checkAutoHit,
+    hit
   ]
 
   return {
     process: () => {
-      if(state > 0) {
-        let d = PageContent.getRoundData();
-        if(d && d.player && d.player.moves > 2)
-          state = 0;
-      }
+      if(state >= states.length)
+        state = 0;
+        
       states[state]();
     }
   }
