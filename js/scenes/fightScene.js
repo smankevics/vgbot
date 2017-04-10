@@ -22,7 +22,10 @@ var FightScene = (tabId, settings) => {
 
   let preHit = () => {
     state++;
-    Actions.hitEnemy(tabId);
+    if(settings.playerClass === 'Mage')
+      Actions.castEnemy(tabId);
+    else
+      Actions.hitEnemy(tabId);
   }
 
   let checkWeapon = () => {
@@ -51,13 +54,22 @@ var FightScene = (tabId, settings) => {
 
   let checkAutoHit = () => {
     state++;
-    Actions.autoHitCheckbox(tabId);
+
+    if(settings.playerClass === 'Mage')
+      Actions.autoCastCheckbox(tabId);
+    else
+      Actions.autoHitCheckbox(tabId);
+
     states[state]();
   }
 
   let hit = () => {
     state++;
-    Actions.hitEnemy(tabId);
+
+    if(settings.playerClass === 'Mage')
+      Actions.castEnemy(tabId);
+    else
+      Actions.hitEnemy(tabId);
   }
 
   const states = [

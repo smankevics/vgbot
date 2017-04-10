@@ -17,6 +17,10 @@ label p {
   margin-right: 15px;
 }
 
+.right {
+  float: right;
+}
+
 #weaponsList {
   width: 120px;
 }

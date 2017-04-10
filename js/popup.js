@@ -16,6 +16,7 @@
 
     function getSettings() {
         return {
+            playerClass: document.getElementById('playerClass').value,
             autoNavigate: document.getElementById('autoNavigate').checked,
             pickUpItems: document.getElementById('pickUpItems').checked,
             autoHeal: document.getElementById('autoHeal').checked,
@@ -51,6 +52,7 @@
         var settings = localStorage.getItem('userSettings');
         if(settings) {
             settings = JSON.parse(settings);
+            document.getElementById('playerClass').value = settings.playerClass;
             document.getElementById('autoNavigate').checked = settings.autoNavigate;
             document.getElementById('pickUpItems').checked = settings.pickUpItems;
             document.getElementById('autoHeal').checked = settings.autoHeal;
