@@ -43,7 +43,7 @@ var Utils = (() => {
     let weapons = body
       .split('<a ')
       .map((s) => s.substring(0, s.indexOf('</a>')))
-      .filter((s) => s.toLowerCase().indexOf('топор') > -1);
+      .filter((s) => s.toLowerCase().indexOf('топор') > -1 || s.toLowerCase().indexOf('секира') > -1);
 
     let result = 0, best = 0;
     weapons.forEach((s) => {
