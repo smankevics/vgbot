@@ -17,6 +17,10 @@ label p {
   margin-right: 15px;
 }
 
+#weaponsList {
+  width: 120px;
+}
+
 #autoHealValue {
   width: 30px;
 }

@@ -82,12 +82,14 @@ var Bot = (() => {
   let removeListener = () => chrome.tabs.onUpdated.removeListener(pageRefreshHandler);
   let isStarted = () => started;
   let currentTabId = () => tabId;
+  let getSettings = () => settings;
 
   return {
     start: start,
     stop: stop,
     isStarted: isStarted,
 
-    currentTabId: currentTabId
+    currentTabId: currentTabId,
+    getSettings: getSettings
   }
 })();

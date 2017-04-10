@@ -20,6 +20,7 @@
             pickUpItems: document.getElementById('pickUpItems').checked,
             autoHeal: document.getElementById('autoHeal').checked,
             autoEquipWeapon: document.getElementById('autoEquipWeapon').checked,
+            weaponsList: document.getElementById('weaponsList').value.split(','),
             autoHealValue: document.getElementById('autoHealValue').value
         }
     }
@@ -54,6 +55,7 @@
             document.getElementById('pickUpItems').checked = settings.pickUpItems;
             document.getElementById('autoHeal').checked = settings.autoHeal;
             document.getElementById('autoEquipWeapon').checked = settings.autoEquipWeapon;
+            document.getElementById('weaponsList').value = settings.weaponsList.join();
             document.getElementById('autoHealValue').value = settings.autoHealValue || 50;
         }
 
