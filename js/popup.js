@@ -19,10 +19,16 @@
             playerClass: document.getElementById('playerClass').value,
             autoNavigate: document.getElementById('autoNavigate').checked,
             pickUpItems: document.getElementById('pickUpItems').checked,
-            autoHeal: document.getElementById('autoHeal').checked,
             autoEquipWeapon: document.getElementById('autoEquipWeapon').checked,
             weaponsList: document.getElementById('weaponsList').value.split(','),
-            autoHealValue: document.getElementById('autoHealValue').value
+            autoHeal: document.getElementById('autoHeal').checked,
+            autoHealValue: document.getElementById('autoHealValue').value,
+            autoRestore: document.getElementById('autoRestore').checked,
+            autoRestoreValue: document.getElementById('autoRestoreValue').value,
+            lowHp: document.getElementById('lowHp').checked,
+            lowHpValue: document.getElementById('lowHpValue').value,
+            lowMp: document.getElementById('lowMp').checked,
+            lowMpValue: document.getElementById('lowMpValue').value
         }
     }
 
@@ -30,7 +36,7 @@
         localStorage.setItem('userSettings', JSON.stringify(getSettings()));
     }
 
-    function handleHealValueChange(e) {
+    function handlePercValueChange(e) {
         if (isNaN(parseFloat(e.target.value)) || !isFinite(e.target.value)) e.target.value = 0;
         if (e.target.value < 0) e.target.value = 0;
         if (e.target.value > 100) e.target.value = 100;
@@ -43,7 +49,10 @@
         document.getElementById('btn_start').onclick = start;
         document.getElementById('btn_stop').onclick = stop;
         document.getElementById('btn_save').onclick = saveSettings;
-        document.getElementById('autoHealValue').onchange = handleHealValueChange;
+        document.getElementById('autoHealValue').onchange = handlePercValueChange;
+        document.getElementById('autoRestoreValue').onchange = handlePercValueChange;
+        document.getElementById('lowHpValue').onchange = handlePercValueChange;
+        document.getElementById('lowMpValue').onchange = handlePercValueChange;
 
         document.getElementById('btn_start').disabled = isStarted;
         document.getElementById('btn_stop').disabled = !isStarted;
@@ -55,10 +64,16 @@
             document.getElementById('playerClass').value = settings.playerClass;
             document.getElementById('autoNavigate').checked = settings.autoNavigate;
             document.getElementById('pickUpItems').checked = settings.pickUpItems;
-            document.getElementById('autoHeal').checked = settings.autoHeal;
             document.getElementById('autoEquipWeapon').checked = settings.autoEquipWeapon;
             document.getElementById('weaponsList').value = settings.weaponsList.join();
+            document.getElementById('autoHeal').checked = settings.autoHeal;
             document.getElementById('autoHealValue').value = settings.autoHealValue || 50;
+            document.getElementById('autoRestore').checked = settings.autoRestore;
+            document.getElementById('autoRestoreValue').value = settings.autoRestoreValue || 50;
+            document.getElementById('lowHp').checked = settings.lowHp;
+            document.getElementById('lowHpValue').value = settings.lowHpValue || 10;
+            document.getElementById('lowMp').checked = settings.lowMp;
+            document.getElementById('lowMpValue').value = settings.lowMpValue || 10;
         }
 
     }

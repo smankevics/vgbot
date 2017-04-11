@@ -1,34 +1,38 @@
 var FightScene = (tabId, settings) => {
   let state = 0;
 
-  let checkTurns = () => {
+  let checkTurns = (cb) => {
     let d = PageContent.getRoundData();
     if(d && d.player && d.player.moves >= 2) {
       state++;
 
       //skip ckeck&equip weapon steps 
-      if(!settings.autoEquipWeapon)
+      if(!settings.autoEquipWeapon || settings.playerClass === 'Mage')
         state += 3;
 
-      states[state]();
+      states[state](cb);
     } else {
       if(PageContent.getHtml().indexOf('"конец хода"') > -1) {
         Actions.combatEndTurn(tabId);
+        cb(Defines.stepResults.OK);
       } else {
         Actions.refresh(tabId);
+        cb(Defines.stepResults.OK);
       }
     }
   }
 
-  let preHit = () => {
+  let preHit = (cb) => {
     state++;
     if(settings.playerClass === 'Mage')
       Actions.castEnemy(tabId);
     else
       Actions.hitEnemy(tabId);
+      
+    cb(Defines.stepResults.OK);
   }
 
-  let checkWeapon = () => {
+  let checkWeapon = (cb) => {
     let noWeapon = false;
     PageContent.getRoundData().logs.forEach((s) => {
       if(s.indexOf('оружием с точностью') > -1)
@@ -39,20 +43,22 @@ var FightScene = (tabId, settings) => {
       //equip weapon
       state++;
       Actions.changeWeapon(tabId);
+      cb(Defines.stepResults.OK);
     } else {
       //skip next step
       state += 2;
-      states[state]();
+      states[state](cb);
     }
   }
 
-  let equipWeapon = () => {
+  let equipWeapon = (cb) => {
     state++;
     let idm = Utils.getBestWeaponId(PageContent.getHtml());
     Actions.useEquipment(tabId, idm);
+    cb(Defines.stepResults.OK);
   }
 
-  let checkAutoHit = () => {
+  let checkAutoHit = (cb) => {
     state++;
 
     if(settings.playerClass === 'Mage')
@@ -60,16 +66,18 @@ var FightScene = (tabId, settings) => {
     else
       Actions.autoHitCheckbox(tabId);
 
-    states[state]();
+    states[state](cb);
   }
 
-  let hit = () => {
+  let hit = (cb) => {
     state++;
 
     if(settings.playerClass === 'Mage')
       Actions.castEnemy(tabId);
     else
       Actions.hitEnemy(tabId);
+
+    cb(Defines.stepResults.OK);
   }
 
   const states = [
@@ -82,11 +90,11 @@ var FightScene = (tabId, settings) => {
   ]
 
   return {
-    process: () => {
+    process: (cb) => {
       if(state >= states.length)
         state = 0;
         
-      states[state]();
+      states[state](cb);
     }
   }
 };

@@ -25,6 +25,6 @@ label p {
   width: 120px;
 }
 
-#autoHealValue {
+.percent {
   width: 30px;
 }

@@ -45,27 +45,41 @@ var Bot = (() => {
     lowHp = false;
   }
 
+  let handleSceneResult = (result) => {
+    if (result === Defines.stepResults.NO_ACTION) {
+      processTimeout = setTimeout(process, Utils.rnd(minDelay, maxDelay));
+    } else if (result === Defines.stepResults.STOP) {
+      stop();
+    }
+  }
+
   let process = () => {
-    let noAction = false;
+    let result, scene;
     PageContent.refresh()
       .then((state) => {
         if (state === Defines.states.DEFAULT) {
-          noAction = mainScene.process();
+          scene = mainScene;
         } else if (state === Defines.states.ITEMS_ON_THE_GROUND) {
-          noAction = itemsOnTheGroundScene.process();
+          scene = itemsOnTheGroundScene;
         } else if (state === Defines.states.SELECT_ENEMY) {
-          noAction = selectEnemyScene.process();
+          scene = selectEnemyScene;
         } else if (state === Defines.states.COMBAT) {
-          noAction = fightScene.process();
+          scene = fightScene;
         } else if (state === Defines.states.NONE) {
           Actions.refresh(tabId);
+          result = Defines.stepResults.OK;
         } else if (state === Defines.states.DEATH) {
-          //stop the process
-          stop();
+          result = Defines.stepResults.STOP;
         }
 
-        if (noAction)
-          processTimeout = setTimeout(process, Utils.rnd(minDelay, maxDelay));
+        if (scene) {
+          scene.process((_result) => {
+            handleSceneResult(_result);
+          })
+        } else {
+          handleSceneResult(result);
+        }
+
       });
   }
 

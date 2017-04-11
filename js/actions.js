@@ -25,6 +25,7 @@ var Actions = (() => {
         combatEndTurn: (tabId) => execute(tabId, Utils.getButtonByName, '("конец хода")[0].click()'),
 
         useHpPotion: (tabId) => execute(tabId, Utils.getLinkByText, '("+")[0].click()'),
+        useMpPotion: (tabId) => execute(tabId, Utils.getLinkByText, '("+")[1].click()'),
         useEquipment: (tabId, idm) => execute(tabId, Utils.getLinkByHref, '("idm=' + idm + '")[0].click()'),
 
         refresh: (tabId) => execute(tabId, Utils.getLinkByText, '("Обновить")[0].click()')

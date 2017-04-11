@@ -42,8 +42,26 @@
             <div class="checkbox">
                 <label><input id="autoHeal" type="checkbox"> <p>Auto heal</p></label>
                  when less than 
-                <input id="autoHealValue" type="text" maxlength="3" />
+                <input id="autoHealValue" class="percent" type="text" maxlength="3" />
                  % HP
+            </div>
+            <div class="checkbox">
+                <label><input id="autoRestore" type="checkbox"> <p>Auto restore</p></label>
+                 when less than 
+                <input id="autoRestoreValue" class="percent" type="text" maxlength="3" />
+                 % MP
+            </div>
+            <div class="checkbox">
+                <label><input id="lowHp" type="checkbox"> <p>Stop when HP</p></label>
+                 less than 
+                <input id="lowHpValue" class="percent" type="text" maxlength="3" />
+                 %
+            </div>
+            <div class="checkbox">
+                <label><input id="lowMp" type="checkbox"> <p>Stop when MP</p></label>
+                 less than 
+                <input id="lowMpValue" class="percent" type="text" maxlength="3" />
+                 %
             </div>
         </div>
     </div>

@@ -1,9 +1,10 @@
 var ItemsOnTheGroundScene = (tabId) => {
   let state = 0;
 
-  let pickAllItems = () => {
+  let pickAllItems = (cb) => {
     state = 0;
     Actions.pickAllItems(tabId);
+    cb(Defines.stepResults.OK);
   }
 
   const states = [
@@ -11,8 +12,8 @@ var ItemsOnTheGroundScene = (tabId) => {
   ]
 
   return {
-    process: () => {
-      states[state]();
+    process: (cb) => {
+      states[state](cb);
     }
   }
 };

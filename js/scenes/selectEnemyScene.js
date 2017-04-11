@@ -1,9 +1,10 @@
 var SelectEnemyScene = (tabId) => {
   let state = 0;
 
-  let selectFirstEnemy = () => {
+  let selectFirstEnemy = (cb) => {
     state = 0;
     Actions.selectEnemy(tabId);
+    cb(Defines.stepResults.OK);
   }
 
   const states = [
@@ -11,8 +12,8 @@ var SelectEnemyScene = (tabId) => {
   ]
 
   return {
-    process: () => {
-      states[state]();
+    process: (cb) => {
+      states[state](cb);
     }
   }
 };
