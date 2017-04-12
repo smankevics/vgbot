@@ -1,5 +1,5 @@
 var Bot = (() => {
-  const minDelay = 600;
+  const minDelay = 300;
   const maxDelay = 2000;
 
   let processTimeout;
