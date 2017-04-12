@@ -16,10 +16,13 @@ var Bot = (() => {
 
   let settings = {};
 
+
   let start = (_settings) => {
     settings = _settings;
     chrome.tabs.getSelected(null, (tab) => {
       tabId = tab.id;
+      
+      Actions.checkNotificationPermissions(tabId);
 
       //create scenes
       mainScene = MainScene(tabId, settings);

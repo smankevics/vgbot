@@ -1,5 +1,18 @@
 var MainScene = (tabId, settings) => {
   let state = 0;
+  let canShowNotification = true;
+
+  let ckeckIncomingMessages = (cb) => {
+    state++;
+
+    if(PageContent.getText().indexOf('Новая почта!') > -1 && canShowNotification) {
+      Actions.notificate(tabId, 'New message!');
+      setTimeout(() => canShowNotification = true, 30000);
+      canShowNotification = false;
+    } 
+
+    return states[state](cb);
+  }
 
   let pickItems = (cb) => {
     state++;
@@ -96,6 +109,7 @@ var MainScene = (tabId, settings) => {
   }
 
   const states = [
+    ckeckIncomingMessages,
     pickItems,
     heal,
     restore,

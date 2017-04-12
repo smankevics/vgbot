@@ -1,10 +1,31 @@
 var Actions = (() => {
-    function execute(tabId, f, code) {
+    let execute = (tabId, f, code) => {
         if(!tabId) 
             return;
 
         chrome.tabs.executeScript(tabId, { code: '(' + f + ')' + code })
-    }
+    };
+
+    let checkNotificationPermissions = () => {
+        if (!Notification)
+            return;
+
+        if (Notification.permission !== "granted")
+            Notification.requestPermission();
+    };
+
+    let notificate = (message) => {
+        if (Notification && Notification.permission !== "granted")
+            Notification.requestPermission();
+        else {
+            let notification = new Notification('Velgame bot', {
+                icon: 'http://velgame.ru/res5/logo1.jpg',
+                body: message,
+            });
+
+            notification.onclick = function() { window.focus(); this.cancel(); };
+        }
+    };
 
     return {
         up: (tabId) => execute(tabId, Utils.getLinkByHref, '("do=nord")[0].click()'),
@@ -28,6 +49,9 @@ var Actions = (() => {
         useMpPotion: (tabId) => execute(tabId, Utils.getLinkByText, '("+")[1].click()'),
         useEquipment: (tabId, idm) => execute(tabId, Utils.getLinkByHref, '("idm=' + idm + '")[0].click()'),
 
-        refresh: (tabId) => execute(tabId, Utils.getLinkByText, '("Обновить")[0].click()')
+        refresh: (tabId) => execute(tabId, Utils.getLinkByText, '("Обновить")[0].click()'),
+
+        checkNotificationPermissions: (tabId) => execute(tabId, checkNotificationPermissions, '()'),
+        notificate: (tabId, message) => execute(tabId, notificate, '("' + message + '")')
     }
 })()
