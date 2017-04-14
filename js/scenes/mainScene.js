@@ -9,9 +9,15 @@ var MainScene = (tabId, settings) => {
       Actions.notificate(tabId, 'New message!');
       setTimeout(() => canShowNotification = true, 30000);
       canShowNotification = false;
-    } 
 
-    return states[state](cb);
+      if(settings.stopOnMessage) {
+        return cb(Defines.stepResults.STOP);
+      } else {
+        return states[state](cb);
+      }
+    } else {
+      return states[state](cb);
+    }
   }
 
   let pickItems = (cb) => {

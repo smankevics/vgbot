@@ -16,6 +16,7 @@
 
     function getSettings() {
         return {
+            stopOnMessage: document.getElementById('stopOnMessage').checked,
             playerClass: document.getElementById('playerClass').value,
             autoNavigate: document.getElementById('autoNavigate').checked,
             pickUpItems: document.getElementById('pickUpItems').checked,
@@ -61,6 +62,7 @@
         var settings = localStorage.getItem('userSettings');
         if(settings) {
             settings = JSON.parse(settings);
+            document.getElementById('stopOnMessage').checked = settings.stopOnMessage;
             document.getElementById('playerClass').value = settings.playerClass;
             document.getElementById('autoNavigate').checked = settings.autoNavigate;
             document.getElementById('pickUpItems').checked = settings.pickUpItems;
