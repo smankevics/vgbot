@@ -1,6 +1,17 @@
 var FightScene = (tabId, settings) => {
   let state = 0;
 
+  let ckeckPageValidness = (cb) => {
+    state++;
+    let d = PageContent.getRoundData();
+    if(d.playerPos >= -1 && d.enemyPos >= -1) {
+      states[state](cb);
+    } else {
+      Actions.refresh(tabId);
+      cb(Defines.stepResults.OK);
+    }
+  }
+
   let checkTurns = (cb) => {
     let d = PageContent.getRoundData();
     if(d && d.player && d.player.moves >= 2) {
@@ -81,6 +92,7 @@ var FightScene = (tabId, settings) => {
   }
 
   const states = [
+    ckeckPageValidness,
     checkTurns,
     preHit,
     checkWeapon,

@@ -105,8 +105,8 @@ var PageContent = (() => {
     });
 
     let posLine = result.filter((s) => s[0] ===  '[' && s[s.length-1] === ']')[0];
-    let playerPos = posLine.indexOf('*');
-    let enemyPos = posLine.indexOf('#') > -1 ? posLine.indexOf('#') : playerPos;
+    let playerPos = posLine && posLine.indexOf('*');
+    let enemyPos = posLine && posLine.indexOf('#') > -1 ? posLine.indexOf('#') : playerPos;
     let res = {
       round: Number(result[infoLineIndex].split(' ')[3]),
       player: getFighterData(result[infoLineIndex+1]),
