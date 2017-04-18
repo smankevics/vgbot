@@ -33,7 +33,7 @@ var FightScene = (tabId, settings) => {
     }
   }
 
-  let preHit = (cb) => {
+  let preCheckWeapon = (cb) => {
     state++;
     if(settings.playerClass === 'Mage')
       Actions.castEnemy(tabId);
@@ -72,16 +72,20 @@ var FightScene = (tabId, settings) => {
   let checkAutoHit = (cb) => {
     state++;
 
-    if(settings.playerClass === 'Mage')
-      Actions.autoCastCheckbox(tabId);
-    else
-      Actions.autoHitCheckbox(tabId);
+    if(settings.autoHit) {
+      if(settings.playerClass === 'Mage')
+        Actions.autoCastCheckbox(tabId);
+      else
+        Actions.autoHitCheckbox(tabId);
+    }
 
     states[state](cb);
   }
 
+  let hits = 0;
   let hit = (cb) => {
     state++;
+    hits++;
 
     if(settings.playerClass === 'Mage')
       Actions.castEnemy(tabId);
@@ -91,21 +95,39 @@ var FightScene = (tabId, settings) => {
     cb(Defines.stepResults.OK);
   }
 
+  let reset = (cb) => {
+    state = 0;
+
+    if(settings.limitHits) {
+      if(hits >= settings.hitsPerRound) {
+        hits = 0;
+        Actions.combatEndTurn(tabId);
+        cb(Defines.stepResults.OK);
+      } else {
+        states[state](cb);
+      }
+    } else {
+      hits = 0;
+      states[state](cb);
+    }
+  }
+
   const states = [
     ckeckPageValidness,
     checkTurns,
-    preHit,
+
+    preCheckWeapon,
     checkWeapon,
     equipWeapon,
+
     checkAutoHit,
-    hit
+    hit,
+
+    reset
   ]
 
   return {
     process: (cb) => {
-      if(state >= states.length)
-        state = 0;
-        
       states[state](cb);
     }
   }

@@ -29,7 +29,10 @@
             lowHp: document.getElementById('lowHp').checked,
             lowHpValue: document.getElementById('lowHpValue').value,
             lowMp: document.getElementById('lowMp').checked,
-            lowMpValue: document.getElementById('lowMpValue').value
+            lowMpValue: document.getElementById('lowMpValue').value,
+            autoHit: document.getElementById('autoHit').checked,
+            limitHits: document.getElementById('limitHits').checked,
+            hitsPerRound: document.getElementById('hitsPerRound').value
         }
     }
 
@@ -76,6 +79,9 @@
             document.getElementById('lowHpValue').value = settings.lowHpValue || 10;
             document.getElementById('lowMp').checked = settings.lowMp;
             document.getElementById('lowMpValue').value = settings.lowMpValue || 10;
+            document.getElementById('autoHit').checked = settings.autoHit;
+            document.getElementById('limitHits').checked = settings.limitHits;
+            document.getElementById('hitsPerRound').value = settings.hitsPerRound || 2;
         }
 
     }
